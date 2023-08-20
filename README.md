@@ -5,7 +5,7 @@
 ## Download
 [Release](https://github.com/nattyan_tv/amongus_launcher/releases/latest)からダウンロードしてください。
 
-使い方は[こちら]()
+使い方は[こちら](https://qiita.com/nattyan_tv/items/c303a88dd27b4c54696c)
 
 Steam版でも大体動くんじゃないんかなって思うけどEpicGameLauncher版を想定して作ってます。
 
