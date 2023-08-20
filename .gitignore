@@ -1,3 +1,6 @@
 instances.json
 .venv
 output
+*.spec
+build
+dist

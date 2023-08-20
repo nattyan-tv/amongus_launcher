@@ -68,7 +68,7 @@ def main(page: flet.Page):
     column_control.controls = items # type: ignore
 
     page.add(column_control)
-    page.add(flet.Text("インスタンスの追加・編集", style=flet.TextThemeStyle.HEADLINE_LARGE))
+    page.add(flet.Text("インスタンスの追加", style=flet.TextThemeStyle.HEADLINE_LARGE))
 
     instance_name = flet.TextField(label="インスタンス名")
     page.add(instance_name)
