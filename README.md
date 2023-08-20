@@ -2,6 +2,10 @@
 
 ![1692530732832](image/README/1692530732832.png)
 
+## Attention!
+こちら、ベントに入るの怖い系エンジニアが作った自己満物件になります。  
+使うとしても自分と友達ぐらいしかないだろうからサポートもしないし文句とか言わないでね！！()
+
 ## Download
 [Release](https://github.com/nattyan_tv/amongus_launcher/releases/latest)からダウンロードしてください。
 
