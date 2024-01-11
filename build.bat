@@ -1,1 +1,1 @@
-pyinstaller --clean --noconfirm --onefile --windowed "main.py" --name "Among Us"
+python -m pyinstaller --clean --noconfirm --onefile --windowed "main.py" --name "Among Us"
