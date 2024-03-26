@@ -15,8 +15,6 @@ ModName = str
 ModUrl = str
 ModDescription = str
 
-TemplateMods: dict[ModName, 'ModClass'] = {}
-
 class ModClass:
     def __init__(
             self,
@@ -51,7 +49,7 @@ class ModClass:
     def remove(self, path: InstancePath):
         os.remove(os.path.join(path, "BepInEx", "plugins", self.name))
 
-TemplateMods = {
+TemplateMods: dict[ModName, ModClass] = {
     "Reactor.dll": ModClass("Reactor.dll", "様々なMODで導入が必要になる前提MOD", "https://github.com/NuclearPowered/Reactor/releases/latest/download/Reactor.dll"),
     "Submerged.dll": ModClass("Submerged.dll", "新MAP「Submerged」を追加するMOD [Reactor.dllのインストールが必要]", "https://github.com/SubmergedAmongUs/Submerged/releases/latest/download/Submerged.dll", ["Reactor.dll"]),
     "SuperNewRoles.dll": ModClass("SuperNewRoles.dll", "様々な役職を追加するMOD [Agartha.dllのインストールが必要]", "https://github.com/SuperNewRoles/SuperNewRoles/releases/latest/download/SuperNewRoles.dll", ["Agartha.dll"]),
