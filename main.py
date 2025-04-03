@@ -1,11 +1,11 @@
-import requests
-import flet
-import os
-import sys
 import json
+import os
 import subprocess
-
+import sys
 from typing import Callable
+
+import flet
+import requests
 
 InstanceName = str
 InstancePath = str
@@ -61,11 +61,11 @@ TemplateMods: dict[ModName, ModClass] = {
 
 def main(page: flet.Page):
     page.title = "Among Us Launcher"
-    page.window_width = 1000
-    page.window_height = 800
+    page.window.width = 1000
+    page.window.height = 800
 
     items = []
-    column_control = flet.Column(controls=items) # type: ignore
+    column_control = flet.Column(controls=items)
 
     def create_cmd(path: InstancePath) -> list[str]:
         cmd = [os.path.join(path, "Among Us.exe")]
@@ -74,7 +74,7 @@ def main(page: flet.Page):
 
     def start_instance(path: InstancePath):
         subprocess.Popen(create_cmd(path))
-        page.window_close()
+        page.window.close()
 
     def get_instances() -> Instance:
         if not os.path.isfile("instances.json"):
@@ -93,6 +93,8 @@ def main(page: flet.Page):
         instances[name] = path
         with open("instances.json", "w") as f:
             f.write(json.dumps({"instances": instances}))
+        instance_name.value = ""
+        pt.value = ""
         column_control.controls.append(create_item((name, path)))
         page.update()
 
@@ -101,7 +103,9 @@ def main(page: flet.Page):
         del instances[name]
         with open("instances.json", "w") as f:
             f.write(json.dumps({"instances": instances}))
-        column_control.controls = [item for item in column_control.controls if item.controls[0].controls[0].content.value != name] # type: ignore
+        column_control.controls = [
+            create_item(item) for item in get_instances().items()
+        ]
         page.update()
 
     def open_instance_folder(path: InstancePath):
@@ -114,11 +118,9 @@ def main(page: flet.Page):
             content=flet.Text(f"{os.path.basename(moditem.name)}を削除しています..."),
             actions=[]
         )
-        page.dialog = modalComponent
-        modalComponent.open = True
-        page.update()
+        page.open(modalComponent)
         moditem.remove(item[1])
-        modalComponent.open = False
+        page.close(modalComponent)
         update_function()
         page.update()
 
@@ -129,31 +131,26 @@ def main(page: flet.Page):
             content=flet.Text(f"「{moditem.name}」{'と前提MOD' if moditem.has_depencities else ''}をダウンロードしています..."),
             actions=[]
         )
-        page.dialog = modalComponent
-        modalComponent.open = True
-        page.update()
+        page.open(modalComponent)
         moditem.download(item[1])
-        modalComponent.open = False
+        page.close(modalComponent)
         update_function()
         page.update()
 
     def change_mods(item: tuple[InstanceName, InstancePath]):
         if not os.path.isdir(os.path.join(item[1], "BepInEx", "plugins")):
-
-            def close_modal(handler):
-                modalComponent.open = False
-                page.update()
-
             modalComponent = flet.AlertDialog(
                 modal=True,
                 title=flet.Text("エラー"),
-                content=flet.Text("MODリストを確認できませんでした。\n確認しようとしたAmong Usがバニラか、BepInExを導入していない可能性があります。"),
+                content=flet.Text(
+                    "MODリストを確認できませんでした。\n確認しようとしたAmong Usがバニラか、BepInExを導入していない可能性があります。"
+                ),
                 actions=[
-                    flet.TextButton("OK",on_click=close_modal),
+                    flet.TextButton("OK"),
                 ],
-                actions_alignment=flet.MainAxisAlignment.END
+                actions_alignment=flet.MainAxisAlignment.END,
             )
-            page.dialog = modalComponent
+            page.open(modalComponent)
             modalComponent.open = True
             page.update()
             return
@@ -220,8 +217,7 @@ def main(page: flet.Page):
     page.add(flet.Text("Among Us Launcher", style=flet.TextThemeStyle.DISPLAY_LARGE))
     page.add(flet.Text("起動したいインスタンスを選択してください", style=flet.TextThemeStyle.HEADLINE_LARGE))
 
-    items = [create_item(item) for item in get_instances().items()]
-    column_control.controls = items # type: ignore
+    column_control.controls = [create_item(item) for item in get_instances().items()]
 
     page.add(column_control)
     page.add(flet.Text("インスタンスの追加", style=flet.TextThemeStyle.HEADLINE_LARGE))
